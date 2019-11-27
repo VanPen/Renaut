@@ -1,0 +1,33 @@
+{% block body %}
+
+<div class="ui bottom attached tab segment active">
+    {% for association in settings.product.associations %}
+        <table id="sylius-product-attributes" class="ui definition table" >
+        {% for productAssociation in association.associatedProducts %}
+            <thead>
+                <th>{{ productAssociation.name}}</th>
+                <th id="stock">Stock Actuel</th>
+                <th>S</th>
+                <th>M</th>
+                <th>L</th>
+                <th>XL</th>
+                <th>XXL</th>
+            </thead>
+            <tbody>
+                <td style="width: 30px">{% include '@SyliusShop/Product/_mainImage.html.twig' with {'product': productAssociation} %}</td>
+                {% if productAssociation|length > 0 %}
+                    <td id="stock" class="sylius-product-attribute-value"><span class="ui green icon label">Oui</span></td>
+                {% else %}
+                    <td id="stock" class="sylius-product-attribute-value"><span class="ui red icon label">Non</span></td>
+                {% endif %}
+            {% for variant in productAssociation.variants %}
+                <td class="sylius-product-attribute-value">{{ variant.onHand }}</td>
+            {% endfor %}
+
+            </tbody>
+        {% endfor %}
+    </table>
+    {{ render(url('sylius_shop_partial_product_association_show', {'productId': settings.product.id, 'id': association.id, 'template': '@SyliusShop/Product/Show/_association.html.twig'})) }}
+    {% endfor %}
+</div>
+{% endblock %}
